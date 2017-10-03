@@ -18,6 +18,7 @@ RUN pyenv global 3.6.1
 # install python library
 RUN pip install numpy scipy pandas sklearn jupyter
 
+# jupyter config
 RUN jupyter notebook --generate-config 
 
 EXPOSE 8888
