@@ -21,7 +21,22 @@ RUN pip install numpy scipy pandas sklearn jupyter
 # jupyter config
 RUN jupyter notebook --generate-config 
 
+# install mecab
+RUN apt-get install -y wget g++ make
+RUN wget -O mecab-0.996.tar.gz https://drive.google.com/uc?'export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE'
+RUN wget -O mecab-ipadic-2.7.0-20070801.tar.gz https://drive.google.com/uc?'export=download&id=0B4y35FiV1wh7MWVlSDBCSXZMTXM'
+RUN tar xvf mecab-0.996.tar.gz
+RUN cd mecab-0.996 && ./configure --enable-utf8-only && make && make install
+RUN echo '/usr/local/lib' > /etc/ld.so.conf.d/mecab
+RUN ldconfig
+
+# install mecab-ipadic
+RUN tar xvf mecab-ipadic-2.7.0-20070801.tar.gz
+RUN cd mecab-ipadic-2.7.0-20070801 && ./configure --with-charset=utf8 && make && make install
+
+# install mecab python binding
+RUN pip install mecab-python3
+
 EXPOSE 8888
 
 CMD cd /root/ && jupyter notebook --ip=0.0.0.0 --allow-root
-
